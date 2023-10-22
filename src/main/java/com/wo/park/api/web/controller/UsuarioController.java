@@ -2,8 +2,10 @@ package com.wo.park.api.web.controller;
 
 import com.wo.park.api.entity.Usuario;
 import com.wo.park.api.service.UsuarioService;
+import com.wo.park.api.web.dto.UsuarioCreateDto;
+import com.wo.park.api.web.dto.UsuarioResponseDto;
+import com.wo.park.api.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,9 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usuarioService.salvar(usuario));
+    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+        Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
 
     @GetMapping("/{id}")
