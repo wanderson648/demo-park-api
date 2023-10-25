@@ -2,6 +2,7 @@ package com.wo.park.api.service;
 
 import com.wo.park.api.entity.Usuario;
 import com.wo.park.api.exception.EntityNotFoundException;
+import com.wo.park.api.exception.PasswordInvalidException;
 import com.wo.park.api.exception.UsernameUniqueViolationException;
 import com.wo.park.api.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,12 @@ public class UsuarioService {
 
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
         if (!novaSenha.equals(confirmaSenha)) {
-            throw new RuntimeException("Nova senha não confere com confirmação de senha");
+            throw new PasswordInvalidException("Nova senha não confere com confirmação de senha");
         }
 
         Usuario user = buscarPorId(id);
         if (!user.getPassword().equals(senhaAtual)) {
-            throw new RuntimeException("Sua senha não confere");
+            throw new PasswordInvalidException("Sua senha %s não confere");
         }
 
         user.setPassword(novaSenha);
